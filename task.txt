@@ -1,0 +1,58 @@
+Here is the practical test.
+
+There is a YAML file (in attachment) that describes services, hosts at which they are running, and their dependencies.
+ Please ignore the 'hosts' sections for this test.
+
+The goal of this test is to write a program in Python to load such YAML files, analyze them, and print a dependencies
+ order based on the service dependencies.
+
+This program must support two command-line arguments: "start" and "stop".
+
+1. Service can be started if all of its dependencies are started.
+2. Service can be stopped if all of its dependants are stopped.
+3. Multiple services should be started or stopped in parallel, if possible
+
+It's something that any service management system(upstart, systemd, etc.) does. For example, if you want to start all
+ these services, you need to start them in the order, so no service will be started before its dependent service is
+  started.
+
+Consider this example:
+---
+mysql:
+  deps: []
+zookeeper:
+  deps: []
+kibana:
+  deps:
+    - mysql
+fullhouse:
+  deps:
+    - kibana
+    - zookeeper
+
+Start:
+1. both mysql and zookeeper should be started in parallel
+2. kibana depends on mysql and should be started right after it
+3. fullhouse depends on kibana and zookeeper and must wait for them to start
+
+Stop:
+1. no services depend on fullhouse, it can be stopped right away
+2. since fullhouse is stopped and no other services depend on kibana and zookeeper, they can be stopped in parallel
+3. and finally we can stop mysql
+
+Additional instructions:
+1. Don't worry about actually starting or stopping services.  Your main goal is to establish the order in which
+ starting and stopping should happen.
+2. Please only use built-in data types; it is not allowed to use Python libraries for graph representation
+ (it makes the task too easy).
+
+Please pay attention to the "small things" (error handling, code documentation, …); the overall quality of the code
+ will be measured.  In short, please treat this assignment as if you were writing production code.
+
+Please note that your script will be tested against different, bigger yaml file which could have different dependencies
+ but overall logic will be the same, so make sure you test different scenarios.
+
+Please submit the test using the URL below.
+
+Good luck!
+

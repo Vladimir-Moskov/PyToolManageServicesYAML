@@ -1,0 +1,12 @@
+mysql:
+  deps: []
+zookeeper:
+  deps: 
+    - fullhouse
+kibana:
+  deps:
+    - mysql
+fullhouse:
+  deps:
+    - kibana
+    - zookeeper
