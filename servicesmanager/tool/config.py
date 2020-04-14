@@ -17,8 +17,8 @@ PRINT_ORDER_INDENT: str = " " * 4
 # TODO: logger color formatting
 # TODO: add additional logging to file
 
-handler = logging.StreamHandler(sys.stderr)
+handler: logging.StreamHandler = logging.StreamHandler(sys.stderr)
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter: logging.Formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app_root_logger.addHandler(handler)

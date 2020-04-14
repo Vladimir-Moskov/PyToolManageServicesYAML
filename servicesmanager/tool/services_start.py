@@ -5,7 +5,7 @@
 # TODO: implement class based approach and get rid of 'too much' args in methods
 
 from services import Services, Service
-from typing import List, Dict, Set
+from typing import List, Set
 import asyncio
 from config import *
 from random import randint
