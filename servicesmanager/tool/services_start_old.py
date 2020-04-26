@@ -2,7 +2,7 @@
     Services start hierarchy creation / running
 """
 
-from services import Services, Service
+from services import Services, ServiceDTO
 from typing import List, Dict
 import asyncio
 from config import *

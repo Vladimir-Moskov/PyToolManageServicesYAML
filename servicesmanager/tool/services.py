@@ -7,7 +7,7 @@ from collections import defaultdict
 
 
 @dataclass
-class ServiceDataClass:
+class ServiceDTO:
     """
         Service DTO - data class, support only current fields, the rest field will be ignored
     """
@@ -16,11 +16,6 @@ class ServiceDataClass:
     deps: List[str]
     dependants: List[str]  # additional data field to store all dependants
 
-
-class Service(ServiceDataClass):
-    """
-        ServiceDataClass wrapper to support custom creation from  dic
-    """
     def __init__(self, name: str, **entry):
         self.name = name
         self.hosts = None
@@ -37,7 +32,8 @@ class Services:
     """
     def __init__(self, **entries):
         # all services as array - has not been used and became redundant, could be deleted
-        self.services: List[Service] = [None]*len(entries)
+        # create a list of services with predefined size
+        self.services: List[ServiceDTO] = [None]*len(entries)
         # for case of start / stop flow - will be used as helpers
         self.start_root: List[str] = []
         self.stop_root: List[str] = []
@@ -60,7 +56,7 @@ class Services:
         # set up all services as dic for optimized asses
         for i, item in enumerate(entries.items()):
             key, value = item
-            new_service: Service = Service(key,  **value)
+            new_service: ServiceDTO = ServiceDTO(key,  **value)
             self.services[i] = new_service
             setattr(self, key, self.services[i])
             # set up root for case of start / stop flow
@@ -69,13 +65,13 @@ class Services:
             if len(new_service.dependants) == 0:
                 self.stop_root.append(new_service.name)
 
-    def __getitem__(self, key) -> Service:
+    def __getitem__(self, key) -> ServiceDTO:
         """
         Implement subscriptable interface in order to get service by name
         :param key: service name
         :return: Service item
         """
-        if isinstance(self.__dict__[key], Service):
+        if isinstance(self.__dict__[key], ServiceDTO):
             return self.__dict__[key]
         else:
             return None
@@ -86,6 +82,10 @@ class Services:
     @classmethod
     def has_circular_dependencies(cls, entries: Dict) -> bool:
         """
+            It may be done with help of lib, but according requirements
+              ' it is not allowed to use Python libraries for graph representation',
+           So here is custom cycle detection implementation.
+
            Find circular dependencies in given hierarchy of services
            Just good old  DFS  Traversal can be used to detect a circular dependencies
            in order to validate starting / stopping flow

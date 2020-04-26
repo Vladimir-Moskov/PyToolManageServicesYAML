@@ -36,9 +36,47 @@ def print_flow_order(flow_ar: List) -> str:
     :param flow_ar:
     :return: string for print
     """
-    flow_ar_str = [', '.join(sub_ar) for i, sub_ar in enumerate(flow_ar)]
+    flow_ar_str = [', '.join(sub_ar) for sub_ar in flow_ar]
     flow_ar_str = ''.join([f"{PRINT_ORDER_INDENT} {i + 1}.{sub_str}\n" for i, sub_str in enumerate(flow_ar_str)])
     return flow_ar_str
+
+
+def start_services(services: Services):
+    """
+        Actual logic to perform services starting
+
+        :param services: - parsed services as Services object
+        :return: None
+    """
+    app_root_logger.info("Start services start hierarchy creation")
+    # get estimated order
+    start_flow: List = start_estimated_order(services)
+    start_flow_str: str = print_flow_order(start_flow)
+    app_root_logger.info(f"Services estimated starting order will be: \n{start_flow_str}")
+
+    # example of real order
+    start_flow: List = start_order(services)
+    start_flow_str: str = print_flow_order(start_flow)
+    app_root_logger.info(f"Services 'real' starting order will be: \n{start_flow_str}")
+
+
+def stop_services(services: Services):
+    """
+        Actual logic to perform services stopping
+
+        :param services: - parsed services as Services object
+        :return: None
+    """
+    app_root_logger.info("Start services stop hierarchy creation")
+    # get estimated order
+    stop_flow: List = stop_estimated_order(services)
+    stop_flow_str: str = print_flow_order(stop_flow)
+    app_root_logger.info(f"Services estimated stopping order will be:\n{stop_flow_str}")
+
+    # example of real order
+    stop_flow: List = stop_order(services)
+    stop_flow_str: str = print_flow_order(stop_flow)
+    app_root_logger.info(f"Services 'real' stopping order will be:\n{stop_flow_str}")
 
 
 if __name__ == '__main__':
@@ -60,28 +98,9 @@ if __name__ == '__main__':
             app_root_logger.debug(repr(services))
 
             if args.operation == Operation.ARG_COMMAND_START:
-                app_root_logger.info("Start services start hierarchy creation")
-                # get estimated order
-                start_flow: List = start_estimated_order(services)
-                start_flow_str: str = print_flow_order(start_flow)
-                app_root_logger.info(f"Services estimated starting order will be: \n{start_flow_str}")
-
-                # example of real order
-                start_flow: List = start_order(services)
-                start_flow_str: str = print_flow_order(start_flow)
-                app_root_logger.info(f"Services 'real' starting order will be: \n{start_flow_str}")
-
+                start_services(services)
             else:
-                app_root_logger.info("Start services stop hierarchy creation")
-                # get estimated order
-                stop_flow: List = stop_estimated_order(services)
-                stop_flow_str: str = print_flow_order(stop_flow)
-                app_root_logger.info(f"Services estimated stopping order will be:\n{stop_flow_str}")
-
-                # example of real order
-                stop_flow: List = stop_order(services)
-                stop_flow_str: str = print_flow_order(stop_flow)
-                app_root_logger.info(f"Services 'real' stopping order will be:\n{stop_flow_str}")
+                stop_services(services)
             app_root_logger.info("DONE !!!")
         else:
             app_root_logger.error("There is no any services or yaml has not been parsed properly ")

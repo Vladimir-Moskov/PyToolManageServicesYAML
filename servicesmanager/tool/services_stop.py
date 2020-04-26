@@ -4,8 +4,8 @@
 
 # TODO: implement class based approach and get rid of 'too much' args in methods
 
-from services import Services, Service
-from typing import List, Dict, Set
+from services import Services, ServiceDTO
+from typing import List, Set
 import asyncio
 from config import *
 from random import randint
@@ -70,7 +70,7 @@ def next_to_stop(stop_flow: List[List[str]],
         :return: next ready to stop
     """
     next_ready: List[str] = []
-    serv: Service
+    serv: ServiceDTO
     serv_to_del: Set[str] = set()
     for key in next_to_check:
         serv = yaml_services[key]
