@@ -81,11 +81,11 @@ def stop_services(services: Services):
 
 if __name__ == '__main__':
     # Parse command line args
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=f"{__doc__} \n ")
 
     parser.add_argument('operation', type=Operation, choices=list(Operation),
-                        help=f"{__doc__} \n "
-                             f"Supported operation values {Operation.ARG_COMMAND_START} or {Operation.ARG_COMMAND_STOP}")
+                        help=f"Supported operation values {Operation.ARG_COMMAND_START} or " 
+                             f"{Operation.ARG_COMMAND_STOP}")
     # default  default=Operation.ARG_COMMAND_START,
     args = parser.parse_args()
 
@@ -93,6 +93,14 @@ if __name__ == '__main__':
     try:
         yaml_path = os.path.abspath(YAML_PATH)
         services: Services = parse_yaml_services(yaml_path, YAML_NAME)
+
+        if not services:
+            app_root_logger.error("There is no any services or yaml has not been parsed properly ")
+    except Exception as error:
+        app_root_logger.error(f"The current services cant be processed because {error}")
+
+    # if validation has been successful
+    try:
         if services:
             app_root_logger.info("YAML file has been parsed and services hierarchy has been created")
             app_root_logger.debug(repr(services))
@@ -102,8 +110,5 @@ if __name__ == '__main__':
             else:
                 stop_services(services)
             app_root_logger.info("DONE !!!")
-        else:
-            app_root_logger.error("There is no any services or yaml has not been parsed properly ")
-
     except Exception as error:
         app_root_logger.error(f"The current services cant be processed because {error}")
