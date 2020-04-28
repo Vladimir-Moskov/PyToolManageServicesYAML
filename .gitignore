@@ -1,2 +1,4 @@
 /test/.pytest_cache/
 /venv/
+/.idea/inspectionProfiles/
+/.idea/
