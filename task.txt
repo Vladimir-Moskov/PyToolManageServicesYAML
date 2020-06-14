@@ -49,10 +49,7 @@ Additional instructions:
 Please pay attention to the "small things" (error handling, code documentation, …); the overall quality of the code
  will be measured.  In short, please treat this assignment as if you were writing production code.
 
-Please note that your script will be tested against different, bigger yaml file which could have different dependencies
- but overall logic will be the same, so make sure you test different scenarios.
 
-Please submit the test using the URL below.
 
-Good luck!
+
 

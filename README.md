@@ -21,7 +21,7 @@ Created By: Volodymyr Moskov
           of Service for building start/stop flow
     TODO: implement class based approach and get rid of 'too much' args in methods
 
-    TODo: fix test as classe based
+    TODo: fix test as class based
 
 ## Python Developer doing devOps/automation tools
 
